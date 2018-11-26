@@ -4,6 +4,7 @@ String.prototype.replaceAll = function(search, replacement) {
 };
 
 const wordsFromDocument = doc => {
+    //we care only about alphanumeric characters and space
     return doc.replaceAll(/[^a-zA-Z0-9 ]/g, ``).split(` `);
 };
 
@@ -24,15 +25,28 @@ const wordFrequencies = words => {
 // 3. compute dot product (& divide)
 const dotProduct = (wordFrequencyMapOne, wordFrequencyMapTwo) => {
     let sum = 0;
-    for (let key of wordFrequencyMapOne.keys()) {
-        if (wordFrequencyMapTwo.has(key)) {
-            sum = sum + wordFrequencyMapOne.get(key) * wordFrequencyMapTwo.get(key);
+    const wordOneSize = wordFrequencyMapOne.size;
+    const wordTwoSize = wordFrequenciesTwo.size;
+
+    if (wordOneSize < wordTwoSize) {
+        for (let key of wordFrequencyMapOne.keys()) {
+            if (wordFrequencyMapTwo.has(key)) {
+                sum = sum + wordFrequencyMapOne.get(key) *
+                    wordFrequencyMapTwo.get(key);
+            }
+        }
+    } else {
+        for (let key of wordFrequenciesTwo.keys()) {
+            if (wordFrequenciesOne.has(key)) {
+                sum = sum + wordFrequencyMapOne.get(key) *
+                    wordFrequencyMapTwo.get(key);
+            }
         }
     }
     return sum;
 };
 
-//vector angle = (dot(1, 2)) / Sqrt (ot(1, 1) * ot(2, 2))
+//vector angle = (dot(1, 2)) / Sqrt (dot(1, 1) * dot(2, 2))
 const vectorAngle = (wordFrequencyMapOne, wordFrequencyMapTwo) => {
     const numerator = dotProduct(wordFrequencyMapOne, wordFrequencyMapTwo);
     const denominator = Math.sqrt(dotProduct(wordFrequencyMapOne, wordFrequencyMapOne) * (dotProduct(wordFrequenciesTwo, wordFrequenciesTwo)))
